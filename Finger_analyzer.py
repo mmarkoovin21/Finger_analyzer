@@ -10,10 +10,17 @@ def sort_images(source_dir, train_dir, test_dir):
             image_files.append(file)
 
     for index, file in enumerate(image_files, start=1):
+        image_source = os.path.join(source_dir, file)
         if index % 8 == 0:
-            shutil.copy2(os.path.join(source_dir, file), test_dir)
+            shutil.copy2(image_source, test_dir)
         else:
-            shutil.copy2(os.path.join(source_dir, file), train_dir)
+            processed_image = process_image(image_source)
+            cv2.imwrite(os.path.join(train_dir, file), processed_image)
+
+def process_image(image_path):
+    gray_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    threshold_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    return threshold_image
 
 def main():
     source_directory = './SourceFolder'
@@ -21,7 +28,7 @@ def main():
     testing_directory = './TestSet'
 
     if os.listdir(training_directory) or os.listdir(testing_directory):
-        print("Images already sorted.")
+        print("Images already sorted and procesed.")
     else:
         sort_images(source_directory, training_directory, testing_directory)
 
