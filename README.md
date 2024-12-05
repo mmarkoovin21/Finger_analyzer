@@ -1,1 +1,1 @@
-# Biometrija_projekt_megi
+# Finger analyzer
