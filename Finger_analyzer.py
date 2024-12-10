@@ -54,19 +54,20 @@ class FingerprintProcessor:
         target_height = 357
         gray_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         resized_image = cv2.resize(gray_image, (target_width, target_height))
-        equalized_image = cv2.equalizeHist(resized_image)
-        gabor_filtered = self._apply_gabor_filter(equalized_image)
-        thresholded_image = cv2.threshold(gabor_filtered, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+        gabor_filtered = self._apply_gabor_filter(resized_image)
+        equalized_image = cv2.equalizeHist(gabor_filtered)
+        
+        thresholded_image = cv2.threshold(equalized_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
         normalized_image = cv2.normalize(thresholded_image, None, 0, 255, cv2.NORM_MINMAX)
         return normalized_image
 
     @staticmethod
     def _apply_gabor_filter(image):
         kernel_size = 31
-        sigma = 4.0
+        sigma = 5.0
         theta = 0
         lambd = 10.0
-        gamma = 0.5
+        gamma = 0.2
         psi = 0
 
         gabor_kernel = cv2.getGaborKernel(
