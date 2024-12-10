@@ -36,13 +36,17 @@ def load_and_process_images(source_dir, processed_dir):
     return image_data, image_labels
 
 def preprocess_image(image_path):
+    target_width = 326
+    target_height = 357
     gray_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-    equalized_image = cv2.equalizeHist(gray_image)
+    resized_image = cv2.resize(gray_image, (target_width, target_height))
+    equalized_image = cv2.equalizeHist(resized_image)
     gabor_filtered = apply_gabor_filter(equalized_image)
     thresholded_image = cv2.threshold(gabor_filtered, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     normalized_image = cv2.normalize(thresholded_image, None, 0, 255, cv2.NORM_MINMAX)
-    
+
     return normalized_image
+
 
 def apply_gabor_filter(image):
     kernel_size = 31
@@ -74,13 +78,26 @@ def create_directories_if_not_exist(*directories):
         if not os.path.exists(directory):
             os.makedirs(directory)
 
+def clear_directory(directory):
+    if os.path.exists(directory):
+        shutil.rmtree(directory)
+    os.makedirs(directory)
+
+
 def main():
     fingerprints_source = './Fingerprints_DB'
     processed_fingerprints_dir = './Processed_Fingerprints'
-    create_directories_if_not_exist(fingerprints_source, processed_fingerprints_dir)
+    fake_fingerprints_source = './Imposter_Fingerprints_DB'
+    processed_fake_fingerprints_dir = './Processed_Imposter_Fingerprints'
+
+    create_directories_if_not_exist(fingerprints_source, processed_fingerprints_dir, fake_fingerprints_source, processed_fake_fingerprints_dir)
 
     if not os.listdir(fingerprints_source):
-        print("Fingerprint source directory is empty! Please add fingerprint data.")
+        print(f"The directory Fingerprints_DB is empty! Please add fingerprint data.")
+        return
+
+    if not os.listdir(fake_fingerprints_source):
+        print(f"The directory Imposter_Fingerprints_DB is empty! Please add imposter fingerprint data.")
         return
 
     labels, normalized_data = process_and_prepare_data(fingerprints_source, processed_fingerprints_dir)
@@ -98,26 +115,18 @@ def main():
     accuracy = accuracy_score(test_labels, predicted_labels)
     print(f"Training completed. Model accuracy: {accuracy * 100:.2f}%")
 
-    threshold = 0.1
+    threshold = 0.27
     probabilities = compute_prediction_probabilities(test_data, model, threshold)
 
     correct_predictions = sum(1 for i in range(len(test_labels)) if test_labels[i] == predicted_labels[i] and probabilities[i] == 1)
     frr = 1 - (correct_predictions / len(test_labels))
     print(f"False Rejection Rate (FRR): {frr:.2%}")
 
-    fake_fingerprints_source = './Imposter_Fingerprints_DB'
-    processed_fake_fingerprints_dir = './Processed_Imposter_Fingerprints'
-    create_directories_if_not_exist(fake_fingerprints_source, processed_fake_fingerprints_dir)
-
-    if not os.listdir(fake_fingerprints_source):
-        print("Skipping FAR calculation as fake fingerprint database is empty.")
-        return
-
     fake_labels, fake_normalized_data = process_and_prepare_data(fake_fingerprints_source, processed_fake_fingerprints_dir)
 
     fake_probabilities = compute_prediction_probabilities(fake_normalized_data, model, threshold)
     false_acceptances = sum(1 for i in range(len(fake_labels)) if fake_probabilities[i] == 1)
-    far = false_acceptances / len(test_labels)
+    far = false_acceptances / len(fake_labels)
     print(f"False Acceptance Rate (FAR): {far:.2%}")
 
 
