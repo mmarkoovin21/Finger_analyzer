@@ -37,8 +37,25 @@ def load_and_process_images(source_dir, processed_dir):
 
 def preprocess_image(image_path):
     gray_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-    thresholded_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    return thresholded_image
+    equalized_image = cv2.equalizeHist(gray_image)
+    gabor_filtered = apply_gabor_filter(equalized_image)
+    thresholded_image = cv2.threshold(gabor_filtered, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    normalized_image = cv2.normalize(thresholded_image, None, 0, 255, cv2.NORM_MINMAX)
+    
+    return normalized_image
+
+def apply_gabor_filter(image):
+    kernel_size = 31
+    sigma = 4.0
+    theta = 0
+    lambd = 10.0
+    gamma = 0.5
+    psi = 0
+
+    gabor_kernel = cv2.getGaborKernel((kernel_size, kernel_size), sigma, theta, lambd, gamma, psi, ktype=cv2.CV_32F)
+
+    filtered_image = cv2.filter2D(image, cv2.CV_8UC3, gabor_kernel)
+    return filtered_image
 
 def save_image(image, filename, dest_dir):
     cv2.imwrite(os.path.join(dest_dir, filename), image)
@@ -93,7 +110,7 @@ def main():
     create_directories_if_not_exist(fake_fingerprints_source, processed_fake_fingerprints_dir)
 
     if not os.listdir(fake_fingerprints_source):
-        print("Fake fingerprint database is empty! Please add fake fingerprint data.")
+        print("Skipping FAR calculation as fake fingerprint database is empty.")
         return
 
     fake_labels, fake_normalized_data = process_and_prepare_data(fake_fingerprints_source, processed_fake_fingerprints_dir)
