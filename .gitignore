@@ -1,3 +1,4 @@
-SourceFolder/
-TestSet/
-TrainingSet/
+Fingerprints_DB/
+Processed_Fingerprints/
+Imposter_Fingerprints_DB/
+Processed_Imposter_Fingerprints/
