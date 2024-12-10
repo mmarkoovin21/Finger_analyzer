@@ -108,14 +108,15 @@ def main():
 
     print("Fingerprints have been processed and split into training and testing sets. Starting model training.")
 
-    model = OneVsRestClassifier(svm.SVC(kernel='rbf', C=10.0, gamma=1.0, decision_function_shape='ovr'))
+
+    model = OneVsRestClassifier(svm.SVC(kernel='rbf', C=35, gamma=0.5, decision_function_shape='ovr'))
     model.fit(train_data, train_labels)
 
     predicted_labels = model.predict(test_data)
     accuracy = accuracy_score(test_labels, predicted_labels)
     print(f"Training completed. Model accuracy: {accuracy * 100:.2f}%")
 
-    threshold = 0.27
+    threshold = 0.285
     probabilities = compute_prediction_probabilities(test_data, model, threshold)
 
     correct_predictions = sum(1 for i in range(len(test_labels)) if test_labels[i] == predicted_labels[i] and probabilities[i] == 1)
