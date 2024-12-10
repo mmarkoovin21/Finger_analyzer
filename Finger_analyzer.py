@@ -110,9 +110,9 @@ class FingerprintModel:
 
 
 def main():
-    fingerprints_source = './Fingerprints_DB'
+    fingerprints_source = './Real_Fingerprints_DB'
     processed_fingerprints_dir = './Processed_Fingerprints'
-    fake_fingerprints_source = './Imposter_Fingerprints_DB'
+    fake_fingerprints_source = './Fake_Fingerprints_DB'
     processed_fake_fingerprints_dir = './Processed_Imposter_Fingerprints'
 
     for directory in [fingerprints_source, processed_fingerprints_dir, fake_fingerprints_source, processed_fake_fingerprints_dir]:
