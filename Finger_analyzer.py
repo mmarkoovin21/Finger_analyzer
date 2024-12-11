@@ -148,7 +148,7 @@ def main():
         for i in range(len(test_labels))
         if test_labels[i] == predicted_labels[i] and probabilities[i] == 1
     )
-    frr = 1 - (correct_predictions / len(test_labels))
+    frr = correct_predictions / len(test_labels)
     print(f"False Rejection Rate (FRR): {frr:.2%}")
 
     fake_processor = FingerprintProcessor(fake_fingerprints_source, processed_fake_fingerprints_dir)
