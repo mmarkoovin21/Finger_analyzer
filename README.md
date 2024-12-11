@@ -29,9 +29,9 @@ pip install numpy opencv-python scikit-learn
 5. Popunite Real_Fingerprints_DB i Fake_Fingerprints_DB stvarnim i lažnim otiscima prstiju u .tif formatu. Osobno korišteni Neurotechnology UareU (520 datoteka) za treniranje i dio FVC2000 DB1 B za testiranje (40 datoteka).
 
 ## Pokretanje
-1.Pokrenite skriptu: Otvorite datoteku finger_analyzer.py u Visual Studio Codeu. Kliknite na gumb "Run Python File" ili koristite terminal za izvršavanje skripte:
+1. Pokrenite skriptu: Otvorite datoteku finger_analyzer.py u Visual Studio Codeu. Kliknite na gumb "Run Python File" ili koristite terminal za izvršavanje skripte:
 ```
 python Finger_analyzer.py
 ```
-2.Provjerite jesu li direktoriji `Real_Fingerprints_DB` i `Fake_Fingerprints_DB` popunjeni podacima o otiscima prstiju. Ako su prazni, program će vas obavijestiti da dodate potrebne datoteke.
+2. Provjerite jesu li direktoriji `Real_Fingerprints_DB` i `Fake_Fingerprints_DB` popunjeni podacima o otiscima prstiju. Ako su prazni, program će vas obavijestiti da dodate potrebne datoteke.
 
