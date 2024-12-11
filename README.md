@@ -14,7 +14,7 @@ Potrebne Python biblioteke možete instalirati pomoću pip ili conda:
 - scikit-learn
 - shutil
 
-## okolina i instalacija
+## Okolina i instalacija
 1. Instalirajte Anacondu: Preuzmite i instalirajte [Anacondu](https://www.anaconda.com/).
 2. Klonirajte repozitorij ili kopirajte datoteke projekta u svoj radni direktorij.
 3. Ako je potrebno, instalirajte sve potrebne biblioteke s naredbom 
@@ -25,8 +25,6 @@ pip install numpy opencv-python scikit-learn
 ```
 ./Real_Fingerprints_DB
 ./Fake_Fingerprints_DB
-./Processed_Fingerprints
-./Processed_Imposter_Fingerprints
 ```
 5. Popunite Real_Fingerprints_DB i Fake_Fingerprints_DB stvarnim i lažnim otiscima prstiju u .tif formatu. Osobno korišteni Neurotechnology UareU (520 datoteka) za treniranje i dio FVC2000 DB1 B za testiranje (40 datoteka).
 
@@ -34,7 +32,6 @@ pip install numpy opencv-python scikit-learn
 1.Pokrenite skriptu: Otvorite datoteku finger_analyzer.py u Visual Studio Codeu. Kliknite na gumb "Run Python File" ili koristite terminal za izvršavanje skripte:
 ```
 python Finger_analyzer.py
-
 ```
 2.Provjerite jesu li direktoriji `Real_Fingerprints_DB` i `Fake_Fingerprints_DB` popunjeni podacima o otiscima prstiju. Ako su prazni, program će vas obavijestiti da dodate potrebne datoteke.
 
